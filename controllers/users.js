@@ -21,7 +21,7 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, subscription } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       user: {
         email: newUser.email,
-        password: newUser.password,
+        subscription: newUser.subscription,
       },
     });
   } catch (error) {
@@ -116,7 +116,7 @@ const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
     const { path: tempUpload, originalname } = req.file;
-    const fileName = `${_id}_${originalname}`
+    const fileName = `${_id}_${originalname}`;
     const resultUpload = path.join(avatarsDir, fileName);
     await fs.rename(tempUpload, resultUpload);
     const avatarURL = path.join("avatars", fileName);
