@@ -6,6 +6,8 @@ const gravatar = require("gravatar");
 
 const path = require("path");
 
+const jimp = require("jimp");
+
 const { nanoid } = require("nanoid");
 
 const fs = require("fs/promises");
@@ -174,8 +176,16 @@ const updateSubscriptionUser = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
-
     const { path: tempUpload, originalname } = req.file;
+    jimp.read("tmp/avatar.jpeg", (error, avatar) => {
+      if (error) {
+        throw error;
+      }
+
+      avatar
+        .resize(250, 250) // resize
+        .write(`public/avatars/${_id}_${originalname}`); // save
+    });
     const filename = `${_id}_${originalname}`;
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
