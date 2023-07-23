@@ -19,6 +19,8 @@ dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
+const jimp = require("jimp");
+
 const register = async (req, res, next) => {
   try {
     const { email, password, subscription } = req.body;
@@ -115,13 +117,24 @@ const updateSubscriptionUser = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
-
     const { path: tempUpload, originalname } = req.file;
+
+     jimp.read("tmp/avatar.jpeg", (error, avatar) => {
+      if (error) {
+        throw error;
+      }
+
+      avatar
+        .resize(250, 250) // resize
+        .write(`public/avatars/${_id}_${originalname}`); // save
+    });
+
+
     const filename = `${_id}_${originalname}`;
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
     const avatarURL = path.join("avatars", filename);
-    await User.findByIdAndUpdate(_id, {avatarURL});
+    await User.findByIdAndUpdate(_id, { avatarURL });
 
     res.json({ avatarURL });
   } catch (error) {
