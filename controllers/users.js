@@ -33,6 +33,16 @@ const register = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
 
+    jimp.read("tmp/avatar.jpeg", (error, avatar) => {
+      if (error) {
+        throw error;
+      }
+
+      avatar
+        .resize(250, 250) // resize
+        .write(`tmp/avatar.jpeg`); // save
+    });
+
     const newUser = await User.create({
       ...req.body,
       password: hashPassword,
@@ -119,15 +129,16 @@ const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
     const { path: tempUpload, originalname } = req.file;
 
-     jimp.read("tmp/avatar.jpeg", (error, avatar) => {
-      if (error) {
-        throw error;
-      }
+    //  jimp.read("tmp/avatar.jpeg", (error, avatar) => {
+    //   if (error) {
+    //     throw error;
+    //   }
 
-      avatar
-        .resize(250, 250) // resize
-        .write(`public/avatars/${_id}_${originalname}`); // save
-    });
+    //   avatar
+    //     .resize(250, 250) // resize
+    //     .write(`public/avatars/${_id}_${originalname}`); // save
+    // });
+
 
 
     const filename = `${_id}_${originalname}`;
