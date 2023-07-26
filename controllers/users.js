@@ -20,15 +20,7 @@ dotenv.config();
 const { SECRET_KEY } = process.env;
 
 const jimp = require("jimp");
-// jimp.read("tmp/avatar.jpeg", (error, avatar) => {
-//   if (error) {
-//     throw error;
-//   }
 
-//   avatar
-//     .resize(250, 250) // resize
-//     .write(`tmp/avatar.jpeg`); // save
-// });
 
 const register = async (req, res, next) => {
   try {
@@ -131,7 +123,6 @@ const updateAvatar = async (req, res, next) => {
     await image.resize(250, 250);
     await image.writeAsync(tempUpload);
 
- 
     const filename = `${_id}_${originalname}`;
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
