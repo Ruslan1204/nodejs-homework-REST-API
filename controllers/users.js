@@ -90,7 +90,7 @@ const resendVerify = async (req, res, next) => {
     if (!user) {
       throw HttpError(404, "User not found");
     }
-    if(user.verify){
+    if (user.verify) {
       throw HttpError(400, "Verification has already been passed");
     }
     const verifyEmail = {
@@ -184,7 +184,7 @@ const updateAvatar = async (req, res, next) => {
     const image = await jimp.read(tempUpload);
     await image.resize(250, 250);
     await image.writeAsync(tempUpload);
-    
+
     const filename = `${_id}_${originalname}`;
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
