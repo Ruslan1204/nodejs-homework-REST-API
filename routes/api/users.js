@@ -10,9 +10,13 @@ const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
-router.get("/verify/:verificationToken", ctrl.verify)
+router.get("/verify/:verificationToken", ctrl.verify);
 
-router.post("/verify", validateBody(schemas.userEmailSchema), ctrl.resendVerify)
+router.post(
+  "/verify",
+  validateBody(schemas.userEmailSchema),
+  ctrl.resendVerify
+);
 
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
@@ -20,9 +24,13 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.patch("/users", authenticate, ctrl.updateSubscriptionUser);
 
-router.patch("/avatars", authenticate, upload.single('avatar'), ctrl.updateAvatar);
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrl.updateAvatar
+);
 
 router.post("/logout", authenticate, ctrl.logout);
-
 
 module.exports = router;
